@@ -407,11 +407,11 @@
   // Update this list to match exactly what you want in the carousel.
   // All paths are relative to the page.
   const images = [
-    "images/home/ext1.jpeg",
-    "images/home/ext2.jpeg",
-    "images/home/ext3.jpeg",
-    "images/home/ar1.jpeg",
-    "images/home/ar2.jpeg",
+    "images/home/living2.jpg",
+    "images/home/kitchen1.jpg",
+    "images/home/dining2.jpg",
+	"images/home/exterior2.jpg",
+    "images/home/deck4.jpg",
 
     // If you want to include some or all of these, add them too:
     // "images/home/signal-2025-12-27-095049.jpeg",
@@ -538,3 +538,204 @@
   updateUI();
   startAuto();
 })();
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const root = document.getElementById("gcGallery");
+  if (!root) return;
+
+  // 1) DEFINE YOUR GALLERIES HERE
+  const ALBUMS = {
+    kitchen: [
+      { src: "images/home/kitchen1.jpg", alt: "Kitchen overview with island and updated appliances" },
+      { src: "images/home/kitchen2.jpg", alt: "Kitchen details and prep space" },
+      { src: "images/home/kitchen3.jpg", alt: "Kitchen seating and adjacent dining area" },
+	  { src: "images/home/kitchen4.jpg", alt: "Kitchen seating and adjacent dining area" },
+	  { src: "images/home/kitchen5.jpg", alt: "Kitchen seating and adjacent dining area" },
+	  { src: "images/home/kitchen6.jpg", alt: "Kitchen seating and adjacent dining area" },
+	  { src: "images/home/kitchen7.jpg", alt: "Kitchen seating and adjacent dining area" },
+	  { src: "images/home/kitchen8.jpg", alt: "Kitchen seating and adjacent dining area" },
+	  { src: "images/home/kitchen9.jpg", alt: "Kitchen seating and adjacent dining area" },
+    ],
+	living: [
+      { src: "images/home/living1.jpg", alt: "Dining area with table seating" },
+      { src: "images/home/living2.jpg", alt: "Dining area with table seating" },
+	  { src: "images/home/living3.jpg", alt: "Dining area with table seating" },
+	  { src: "images/home/living4.jpg", alt: "Dining area with table seating" },
+	  { src: "images/home/living5.jpg", alt: "Dining area with table seating" },
+	  { src: "images/home/living6.jpg", alt: "Dining area with table seating" },
+	  { src: "images/home/living7.jpg", alt: "Dining area with table seating" },
+	  { src: "images/home/living8.jpg", alt: "Dining area with table seating" },
+	  { src: "images/home/living9.jpg", alt: "Dining area with table seating" },
+	  { src: "images/home/living10.jpg", alt: "Dining area with table seating" },
+	  { src: "images/home/living11.jpg", alt: "Dining area with table seating" },
+    ],
+    dining: [
+      { src: "images/home/dining1.jpg", alt: "Dining area with table seating" },
+      { src: "images/home/dining2.jpg", alt: "Dining space with open layout into living area" },
+	  { src: "images/home/dining3.jpg", alt: "Dining space with open layout into living area" },
+    ],
+    bedrooms: [
+      { src: "images/home/master1.jpg", alt: "Primary bedroom with comfortable bedding" },
+      { src: "images/home/master2.jpg", alt: "Bedroom with natural light and closet storage" },
+      { src: "images/home/master3.jpg", alt: "Additional bedroom setup for guests" },
+    ],
+	bathrooms: [
+      { src: "images/home/mainbath1.jpg", alt: "Main floor full bathroom" },
+      { src: "images/home/downbath1.jpg", alt: "Downstairs shared full bath." },
+      { src: "images/home/upbath1.jpg", alt: "Upstairs shared full bath" },
+	  { src: "images/home/master7.jpg", alt: "Master ensuite full bath" },
+	  { src: "images/home/downking4.jpg", alt: "Lower Level king bedroom ensuite full bath" },
+    ],
+	exterior: [
+      { src: "images/home/exterior1.jpg", alt: "Primary bedroom with comfortable bedding" },
+      { src: "images/home/exterior2.jpg", alt: "Primary bedroom with comfortable bedding" },
+      { src: "images/home/exterior3.jpg", alt: "Primary bedroom with comfortable bedding" },
+	  { src: "images/home/exterior4.jpg", alt: "Primary bedroom with comfortable bedding" },
+	  { src: "images/home/exterior5.jpg", alt: "Primary bedroom with comfortable bedding" },
+	  { src: "images/home/exterior6.jpg", alt: "Primary bedroom with comfortable bedding" },
+	  { src: "images/home/deck1.jpg", alt: "Primary bedroom with comfortable bedding" },
+	  { src: "images/home/deck2.jpg", alt: "Primary bedroom with comfortable bedding" },
+	  { src: "images/home/deck3.jpg", alt: "Primary bedroom with comfortable bedding" },
+	  { src: "images/home/deck4.jpg", alt: "Primary bedroom with comfortable bedding" },
+    ],
+	aerial: [
+		{ src: "images/home/aerial1.jpg", alt: "Primary bedroom with comfortable bedding" },
+		{ src: "images/home/aerial2.jpg", alt: "Primary bedroom with comfortable bedding" },
+		{ src: "images/home/aerial3.jpg", alt: "Primary bedroom with comfortable bedding" },
+		{ src: "images/home/aerial4.jpg", alt: "Primary bedroom with comfortable bedding" },
+	]
+  };
+
+  // 2) Carousel wiring (no dependencies)
+  const track = root.querySelector(".gc-track");
+  const dotsWrap = root.querySelector(".gc-dots");
+  const caption = root.querySelector(".gc-caption");
+  const prevBtn = root.querySelector(".gc-btn--prev");
+  const nextBtn = root.querySelector(".gc-btn--next");
+  const tabs = Array.from(root.querySelectorAll(".gc-tab"));
+
+  let activeAlbumKey = null;
+  let slides = [];
+  let index = 0;
+
+  function setCaption() {
+    const item = slides[index];
+    caption.textContent = item ? item.alt : "";
+  }
+
+  function updateUI() {
+    track.style.transform = `translateX(-${index * 100}%)`;
+    dotsWrap.querySelectorAll(".gc-dot").forEach((d, i) => {
+      d.classList.toggle("is-active", i === index);
+    });
+    setCaption();
+  }
+
+  function clamp(n) {
+    const max = slides.length - 1;
+    if (n < 0) return max;
+    if (n > max) return 0;
+    return n;
+  }
+
+  function goTo(i) {
+    index = clamp(i);
+    updateUI();
+  }
+
+  function next() { goTo(index + 1); }
+  function prev() { goTo(index - 1); }
+
+  function build(albumKey) {
+    const items = ALBUMS[albumKey] || [];
+    activeAlbumKey = albumKey;
+    slides = items;
+    index = 0;
+
+    // Clear
+    track.innerHTML = "";
+    dotsWrap.innerHTML = "";
+
+    if (!items.length) {
+      caption.textContent = "No photos in this gallery yet.";
+      return;
+    }
+
+    // Build slides and dots
+    items.forEach((item, i) => {
+      const slide = document.createElement("div");
+      slide.className = "gc-slide";
+
+      const img = document.createElement("img");
+      img.className = "gc-img";
+      img.src = item.src;
+      img.alt = item.alt; // actual accessibility alt
+      img.loading = i === 0 ? "eager" : "lazy";
+      img.decoding = "async";
+
+      slide.appendChild(img);
+      track.appendChild(slide);
+
+      const dot = document.createElement("button");
+      dot.type = "button";
+      dot.className = "gc-dot";
+      dot.setAttribute("aria-label", `Go to slide ${i + 1}`);
+      dot.addEventListener("click", () => goTo(i));
+      dotsWrap.appendChild(dot);
+    });
+
+    updateUI();
+  }
+
+  // Buttons
+  nextBtn.addEventListener("click", next);
+  prevBtn.addEventListener("click", prev);
+
+  // Keyboard arrows when focused
+  root.tabIndex = 0;
+  root.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight") next();
+    if (e.key === "ArrowLeft") prev();
+  });
+
+  // Touch swipe
+  let startX = 0;
+  let touching = false;
+
+  root.addEventListener("touchstart", (e) => {
+    if (!e.touches || !e.touches.length) return;
+    touching = true;
+    startX = e.touches[0].clientX;
+  }, { passive: true });
+
+  root.addEventListener("touchend", (e) => {
+    if (!touching) return;
+    touching = false;
+
+    const endX = (e.changedTouches && e.changedTouches[0])
+      ? e.changedTouches[0].clientX
+      : startX;
+
+    const dx = endX - startX;
+    const threshold = 40;
+    if (dx > threshold) prev();
+    else if (dx < -threshold) next();
+  });
+
+  // Tabs
+  tabs.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const albumKey = btn.dataset.gcAlbum;
+
+      tabs.forEach(t => t.classList.remove("is-active"));
+      btn.classList.add("is-active");
+
+      if (albumKey !== activeAlbumKey) build(albumKey);
+    });
+  });
+
+  // Initial load (first tab)
+  const first = tabs[0];
+  if (first) build(first.dataset.gcAlbum);
+});
