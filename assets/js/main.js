@@ -62,7 +62,7 @@
         var sections = document.querySelectorAll('.page-scroll');
         var scrollPos = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
-        for (var i = 0; i < sections.length; i++) {lao
+        for (var i = 0; i < sections.length; i++) {
             var currLink = sections[i];
             var val = currLink.getAttribute('href');
             var refElement = document.querySelector(val);
