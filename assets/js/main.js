@@ -62,7 +62,7 @@
         var sections = document.querySelectorAll('.page-scroll');
         var scrollPos = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
-        for (var i = 0; i < sections.length; i++) {
+        for (var i = 0; i < sections.length; i++) {lao
             var currLink = sections[i];
             var val = currLink.getAttribute('href');
             var refElement = document.querySelector(val);
@@ -96,19 +96,7 @@
     );
 
 
-    //===== glide tiny for testimonial
-    
-    tns({
-        container: '.testimonial_active',
-        items: 1,
-        slideBy: 'page',
-        autoplay: false,
-        mouseDrag: true,
-        gutter: 0,
-        nav: true,
-        controls: false,
-    });
-
+   
     //WOW Scroll Spy
     var wow = new WOW({
         //disabled for mobile
