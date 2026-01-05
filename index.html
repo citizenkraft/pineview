@@ -180,6 +180,7 @@ There is a wide variety of mountain recreation & sight-seeing opportunities in t
 						<button class="gc-tab" type="button" data-gc-album="living">Living Room</button>
 						<button class="gc-tab" type="button" data-gc-album="bedrooms">Bedrooms</button>
 						<button class="gc-tab" type="button" data-gc-album="bathrooms">Bathrooms</button>
+                        <button class="gc-tab" type="button" data-gc-album="downstairsCommon">Downstairs Common Area</button>
 						<button class="gc-tab" type="button" data-gc-album="exterior">Exterior</button>
 						<button class="gc-tab" type="button" data-gc-album="aerial">Aerial View</button>
 					</div>
@@ -364,63 +365,77 @@ We'll get back to you just as quick as we can.
     <!--====== Main js ======-->
     <script src="assets/js/main.js"></script>
     <script>
-        (function () {
-            function trackEvent(eventName, params = {}) {
-        if (typeof gtag === 'function') {
-        gtag('event', eventName, params);
-        }
+        document.addEventListener('DOMContentLoaded', function () {
+
+        function trackEvent(eventName, params = {}) {
+            if (typeof gtag === 'function') {
+            gtag('event', eventName, params);
+            }
         }
 
+        /* -------------------------
+            Scroll depth (75%)
+        -------------------------- */
         let scrollTracked = false;
 
         window.addEventListener('scroll', () => {
-        const scrolled = window.scrollY + window.innerHeight;
-        const height = document.documentElement.scrollHeight;
+            const scrolled = window.scrollY + window.innerHeight;
+            const height = document.documentElement.scrollHeight;
 
-        if (!scrollTracked && scrolled / height > 0.75) {
+            if (!scrollTracked && scrolled / height > 0.75) {
             scrollTracked = true;
             trackEvent('scroll_75');
-        }
-        });
-            const SESSION_KEY = 'pv_photo_gallery_engaged';
-
-            function fireOncePerSession(params) {
-                if (sessionStorage.getItem(SESSION_KEY) === '1') return;
-                sessionStorage.setItem(SESSION_KEY, '1');
-
-                trackEvent('photo_gallery_engaged', {
-                ...params,
-                page_location: window.location.href
-                });
             }
+        }, { passive: true });
 
-            // Category tab clicks
-            document.querySelectorAll('.gc-tab').forEach(btn => {
-                btn.addEventListener('click', () => {
-                const album = btn.getAttribute('data-gc-album') || 'unknown';
-                fireOncePerSession({ trigger: 'tab', album });
-                }, { passive: true });
+        /* -------------------------
+            Photo gallery engagement
+        -------------------------- */
+        const SESSION_KEY = 'pv_photo_gallery_engaged';
+
+        function fireOncePerSession(params) {
+            if (sessionStorage.getItem(SESSION_KEY) === '1') return;
+            sessionStorage.setItem(SESSION_KEY, '1');
+
+            trackEvent('photo_gallery_engaged', {
+            ...params,
+            page_location: window.location.href
             });
+        }
 
-            // Next / Prev clicks
-            const prevBtn = document.querySelector('.gc-btn--prev');
-            const nextBtn = document.querySelector('.gc-btn--next');
-
-            prevBtn?.addEventListener('click', () => {
-                fireOncePerSession({ trigger: 'prev_next', direction: 'prev' });
+        // Category tab clicks
+        document.querySelectorAll('.gc-tab').forEach(btn => {
+            btn.addEventListener('click', () => {
+            const album = btn.getAttribute('data-gc-album') || 'unknown';
+            fireOncePerSession({ trigger: 'tab', album });
             }, { passive: true });
+        });
 
-            nextBtn?.addEventListener('click', () => {
-                fireOncePerSession({ trigger: 'prev_next', direction: 'next' });
-            }, { passive: true });
-        })();
+        // Next / Prev clicks
+        const prevBtn = document.querySelector('.gc-btn--prev');
+        const nextBtn = document.querySelector('.gc-btn--next');
 
-        document.getElementById('contact-form').addEventListener('submit', function () {
-        gtag('event', 'contact_form_submit', {
+        prevBtn?.addEventListener('click', () => {
+            fireOncePerSession({ trigger: 'prev_next', direction: 'prev' });
+        }, { passive: true });
+
+        nextBtn?.addEventListener('click', () => {
+            fireOncePerSession({ trigger: 'prev_next', direction: 'next' });
+        }, { passive: true });
+
+        /* -------------------------
+            Contact form submit
+        -------------------------- */
+        const contactForm = document.getElementById('contact-form');
+
+        contactForm?.addEventListener('submit', function () {
+            trackEvent('contact_form_submit', {
             event_category: 'engagement',
             event_label: 'contact_form'
+            });
         });
-    });
+
+        });
     </script>
 </body>
 </html>
