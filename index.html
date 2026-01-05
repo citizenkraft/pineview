@@ -11,11 +11,22 @@
 
 	gtag('config', 'G-3QEZ3N7779');
 
-    document.getElementById('contact-form').addEventListener('submit', function () {
-        gtag('event', 'contact_form_submit', {
-            event_category: 'engagement',
-            event_label: 'contact_form'
-        });
+    function trackEvent(eventName, params = {}) {
+        if (typeof gtag === 'function') {
+        gtag('event', eventName, params);
+        }
+    }
+
+    let scrollTracked = false;
+
+    window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY + window.innerHeight;
+    const height = document.documentElement.scrollHeight;
+
+    if (!scrollTracked && scrolled / height > 0.75) {
+        scrollTracked = true;
+        trackEvent('scroll_75');
+    }
     });
 	</script>
 
@@ -123,7 +134,7 @@
                         <div class="col-lg-8 col-md-10">
                             <div class="hero_content text-center">
                                 <h2 class="hero_title wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.2s">Pine View Home</br> of Leadville</h2>
-                                <p class="wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.5s">A 6 Bedroom, 5 Bath vacation home nestled on 5 acres just minutes from downtown Leadville.</p>
+                                <p class="wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.5s">A 6 Bedroom, 5 Bath vacation home nestled on 5 acres x`just minutes from downtown Leadville.</p>
                                 <a href="#explore" class="main-btn wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.8s">Explore our Home</a>
                             </div> <!-- hero content -->
                         </div>
@@ -369,6 +380,47 @@ We'll get back to you just as quick as we can.
     
     <!--====== Main js ======-->
     <script src="assets/js/main.js"></script>
-    
+    <script>
+        (function () {
+            const SESSION_KEY = 'pv_photo_gallery_engaged';
+
+            function fireOncePerSession(params) {
+                if (sessionStorage.getItem(SESSION_KEY) === '1') return;
+                sessionStorage.setItem(SESSION_KEY, '1');
+
+                trackEvent('photo_gallery_engaged', {
+                ...params,
+                page_location: window.location.href
+                });
+            }
+
+            // Category tab clicks
+            document.querySelectorAll('.gc-tab').forEach(btn => {
+                btn.addEventListener('click', () => {
+                const album = btn.getAttribute('data-gc-album') || 'unknown';
+                fireOncePerSession({ trigger: 'tab', album });
+                }, { passive: true });
+            });
+
+            // Next / Prev clicks
+            const prevBtn = document.querySelector('.gc-btn--prev');
+            const nextBtn = document.querySelector('.gc-btn--next');
+
+            prevBtn?.addEventListener('click', () => {
+                fireOncePerSession({ trigger: 'prev_next', direction: 'prev' });
+            }, { passive: true });
+
+            nextBtn?.addEventListener('click', () => {
+                fireOncePerSession({ trigger: 'prev_next', direction: 'next' });
+            }, { passive: true });
+        })();
+
+        document.getElementById('contact-form').addEventListener('submit', function () {
+        gtag('event', 'contact_form_submit', {
+            event_category: 'engagement',
+            event_label: 'contact_form'
+        });
+    });
+    </script>
 </body>
 </html>
