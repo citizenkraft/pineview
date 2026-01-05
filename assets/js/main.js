@@ -325,7 +325,6 @@ document.addEventListener("DOMContentLoaded", () => {
     dining: [
       { src: "images/home/dining1.jpg", alt: "" },
       { src: "images/home/dining2.jpg", alt: "" },
-	  { src: "images/home/dining3.jpg", alt: "" },
     ],
     bedrooms: [
       { src: "images/home/master1.jpg", alt: "Master bedroom with king bed and ensuite bathroom" },
