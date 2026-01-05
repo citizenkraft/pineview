@@ -10,6 +10,13 @@
 	gtag('js', new Date());
 
 	gtag('config', 'G-3QEZ3N7779');
+
+    document.getElementById('contact-form').addEventListener('submit', function () {
+        gtag('event', 'contact_form_submit', {
+            event_category: 'engagement',
+            event_label: 'contact_form'
+        });
+    });
 	</script>
 
 
@@ -228,8 +235,8 @@ There is a wide variety of mountain recreation & sight-seeing opportunities in t
                     <div class="single_pricing section_title text-left pb-25">
                         <h4 class="title wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.2s">Booking and Availability</h4>
                         <p class="wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.4s">
- 						Pricing and availability can be seen on our <a href="https://www.airbnb.com/rooms/1111555497924751835">Airbnb listing</a>. Please contact us directly for your best price!
-						<br/>
+ 						Availability and general pricing information can be seen on our <a href="https://www.airbnb.com/rooms/1111555497924751835">Airbnb listing</a>. Please <a class="page-scroll" href="#contact">contact us</a> directly for your best rate!
+						<!-- <br/>
 						<br></br>
 						Sample rates: <br/>
 						<ul class="pricing_list">
@@ -237,7 +244,7 @@ There is a wide variety of mountain recreation & sight-seeing opportunities in t
 							<li>All 5 bedrooms, $650/night Summer & Ski Season, or $3900 per week for up to 12 guests.</li>
 							<li>Two guests using one room (with access to entire home) for a week in low season, $1320 per week. </li>
 							<li>Two or three couples for a weekend, $1320.</li>
-						</ul>
+						</ul> -->
 						<!-- <Br/>
 						All rates assume our simple clean guest policy.  -->
 						</p>
