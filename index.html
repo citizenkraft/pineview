@@ -11,23 +11,6 @@
 
 	gtag('config', 'G-3QEZ3N7779');
 
-    function trackEvent(eventName, params = {}) {
-        if (typeof gtag === 'function') {
-        gtag('event', eventName, params);
-        }
-    }
-
-    let scrollTracked = false;
-
-    window.addEventListener('scroll', () => {
-    const scrolled = window.scrollY + window.innerHeight;
-    const height = document.documentElement.scrollHeight;
-
-    if (!scrollTracked && scrolled / height > 0.75) {
-        scrollTracked = true;
-        trackEvent('scroll_75');
-    }
-    });
 	</script>
 
 
@@ -134,7 +117,7 @@
                         <div class="col-lg-8 col-md-10">
                             <div class="hero_content text-center">
                                 <h2 class="hero_title wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.2s">Pine View Home</br> of Leadville</h2>
-                                <p class="wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.5s">A 6 Bedroom, 5 Bath vacation home nestled on 5 acres x`just minutes from downtown Leadville.</p>
+                                <p class="wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.5s">A 6 Bedroom, 5 Bath vacation home nestled on 5 acres just minutes from downtown Leadville.</p>
                                 <a href="#explore" class="main-btn wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.8s">Explore our Home</a>
                             </div> <!-- hero content -->
                         </div>
@@ -382,6 +365,23 @@ We'll get back to you just as quick as we can.
     <script src="assets/js/main.js"></script>
     <script>
         (function () {
+            function trackEvent(eventName, params = {}) {
+        if (typeof gtag === 'function') {
+        gtag('event', eventName, params);
+        }
+        }
+
+        let scrollTracked = false;
+
+        window.addEventListener('scroll', () => {
+        const scrolled = window.scrollY + window.innerHeight;
+        const height = document.documentElement.scrollHeight;
+
+        if (!scrollTracked && scrolled / height > 0.75) {
+            scrollTracked = true;
+            trackEvent('scroll_75');
+        }
+        });
             const SESSION_KEY = 'pv_photo_gallery_engaged';
 
             function fireOncePerSession(params) {
